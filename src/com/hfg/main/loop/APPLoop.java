@@ -202,6 +202,7 @@ public class APPLoop implements Runnable {
             if (seconds == 0) {
                 System.out.println();
                 done = true;
+                
             }
         }
     }

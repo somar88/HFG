@@ -37,55 +37,73 @@ public class APPLoop implements Runnable {
     }
 
     void startApplication() {
-        loading(3, "Please wait! ");
         System.out.println("Welcome to Hotfix Patch Processing!");
-        if (!login()) {
-            System.err.print("Error: Login was not successful!");
-            stop();
-        } else {
-            while (running) {
-                // TODO: start the logic controller
-                int start = uInput.askInputInt("Please enter: "
-                        + "\n(1) Start Processing EP Requests"
-                        + "\n(2) "
-                        + "\n(3) Exit the application!\n");
-                switch (start) {
-                    case 1:
-                        while (running) {
-                            // TODO: start the logic controller
-                            int input = uInput.askInputInt("Please enter: "
-                                    + "\n(1) for EP Processing"
-                                    + "\n(2) for VP Processing"
-                                    + "\n(3) for HFC Processing"
-                                    + "\n(4) to Exit the application!\n");
-                            switch (input) {
-                                case 1:
-                                    startEmergencyPatchProcessing();
-                                    break;
-                                case 2:
-                                    startVerificationPatchProcessing();
-                                    break;
-                                case 3:
-                                    startHotfixCollectionPatchProcessing();
-                                    break;
-                                case 4:
-                                    stop();
-                                    break;
-                                default:
-                                    System.out.println("Please pick a valid process number!");
-                            }
-                        }
-                    case 2:
-
-                        break;
-                    case 3:
-                        stop();
-                    default:
-                        System.out.println("Please pick a valid process number!");
+        loading(3, "Starting Application, please wait! ");
+        int login = uInput.askInputInt("Please enter: "
+                + "\n(1) to use default login parameter"
+                + "\n(2) to enter user, password, URL "
+                + "\n(3) Exit the application!\n");
+        switch (login) {
+            case 1:
+                if (!default_login()) {
+                    System.err.print("Error: Login was not successful!");
+                    stop();
                 }
-            }
-            System.out.println("See you soon, bye!");
+                break;
+            case 2:
+                if (!login()) {
+                    System.err.print("Error: Login was not successful!");
+                    stop();
+                }
+                break;
+            case 3:
+                stop();
+                break;
+            default:
+                System.out.println("Please pick a valid process number!");
         }
+        while (running) {
+            // TODO: start the logic controller
+            int start = uInput.askInputInt("Please enter: "
+                    + "\n(1) Start Processing EP Requests"
+                    + "\n(2) "
+                    + "\n(3) Exit the application!\n");
+            switch (start) {
+                case 1:
+                    while (running) {
+                        // TODO: start the logic controller
+                        int input = uInput.askInputInt("Please enter: "
+                                + "\n(1) for EP Processing"
+                                + "\n(2) for VP Processing"
+                                + "\n(3) for HFC Processing"
+                                + "\n(4) to Exit the application!\n");
+                        switch (input) {
+                            case 1:
+                                startEmergencyPatchProcessing();
+                                break;
+                            case 2:
+                                startVerificationPatchProcessing();
+                                break;
+                            case 3:
+                                startHotfixCollectionPatchProcessing();
+                                break;
+                            case 4:
+                                stop();
+                                break;
+                            default:
+                                System.out.println("Please pick a valid process number!");
+                        }
+                    }
+                case 2:
+
+                    break;
+                case 3:
+                    stop();
+                default:
+                    System.out.println("Please pick a valid process number!");
+            }
+        }
+        System.out.println("See you soon, bye!");
     }
 
     void startEmergencyPatchProcessing() {
@@ -171,13 +189,24 @@ public class APPLoop implements Runnable {
     }
 
     private boolean login() {
-        String username = uInput.askInputString("Please enter username:");
-        String password = uInput.askInputString("Please enter passowrd:");
-        String URL = uInput.askInputString("Please enter MySQL DB connection URL:");
-        boolean loginsuccessful = dbm.login(username, password, URL);
-        loading(3, "loading please wait\n");
-        System.out.println("Connection successful: " + dbm.conn);
+        String username = uInput.askInputString("Please enter username:").trim();
+        String password = uInput.askInputString("Please enter passowrd:").trim();
+        String dbname = uInput.askInputString("Please enter DB name:").trim();
+        boolean loginsuccessful = dbm.login(username, password, "jdbc:mysql://localhost:3306/"+dbname+"?useSSL=true");
+        loading(3, "Checking DB connection, please wait\n");
+        if (dbm.conn != null) {
+            System.out.println("Connection successful: " + dbm.conn);
+        } else {
+            System.err.println("Connection to DB was not successful! ");
+        }
         loading(3, "Starting Application");
+        return loginsuccessful;
+    }
+
+    private boolean default_login() {
+        boolean loginsuccessful = dbm.login("management", "dev@man", "jdbc:mysql://localhost:3306/management?useSSL=true");
+        loading(3, "");
+        System.out.println("Connection successful: " + dbm.conn);
         return loginsuccessful;
     }
 
@@ -189,7 +218,7 @@ public class APPLoop implements Runnable {
         System.out.print(message);
         while (!done) {
             now = System.currentTimeMillis();
-            if (now - starttime >= 1000) {
+            if (now - starttime >= 500) {
                 seconds--;
                 System.out.print(".");
                 loadingendline++;
@@ -202,7 +231,7 @@ public class APPLoop implements Runnable {
             if (seconds == 0) {
                 System.out.println();
                 done = true;
-                
+
             }
         }
     }

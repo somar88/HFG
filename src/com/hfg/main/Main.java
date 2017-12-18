@@ -16,5 +16,6 @@ public class Main {
     public static void main(String[] args) {
         APPLoop loop = new APPLoop();
         loop.init();
+        loop.stop();
     }
 }

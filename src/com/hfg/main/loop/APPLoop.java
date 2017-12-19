@@ -43,16 +43,20 @@ public class APPLoop implements Runnable {
                 + "\n(1) to use default login parameter"
                 + "\n(2) to enter user, password, URL "
                 + "\n(3) Exit the application!\n");
+        int loginAttemptsCounter = 0;
+
         switch (login) {
             case 1:
                 if (!default_login()) {
                     System.err.print("Error: Login was not successful!");
+                    loginAttemptsCounter++;
                     stop();
                 }
                 break;
             case 2:
                 if (!login()) {
                     System.err.print("Error: Login was not successful!");
+                    loginAttemptsCounter++;
                     stop();
                 }
                 break;
@@ -65,18 +69,18 @@ public class APPLoop implements Runnable {
         while (running) {
             // TODO: start the logic controller
             int start = uInput.askInputInt("Please enter: "
-                    + "\n(1) Start Processing EP Requests"
-                    + "\n(2) "
-                    + "\n(3) Exit the application!\n");
+                    + "\n(1): Create an EP Request"
+                    + "\n(2): Start Processing EP Requests"
+                    + "\n(3): Exit the application!\n");
             switch (start) {
                 case 1:
                     while (running) {
                         // TODO: start the logic controller
                         int input = uInput.askInputInt("Please enter: "
-                                + "\n(1) for EP Processing"
-                                + "\n(2) for VP Processing"
-                                + "\n(3) for HFC Processing"
-                                + "\n(4) to Exit the application!\n");
+                                + "\n(1): for EP Processing"
+                                + "\n(2): for VP Processing"
+                                + "\n(3): for HFC Processing"
+                                + "\n(4): to Exit the application!\n");
                         switch (input) {
                             case 1:
                                 startEmergencyPatchProcessing();
@@ -111,10 +115,10 @@ public class APPLoop implements Runnable {
         while (running) {
             // TODO: start the logic controller
             int input = uInput.askInputInt("Please pick a number: "
-                    + "\n(1) if it is a Standard Downtime EP"
-                    + "\n(2) if it is an Extraordinary Downtime/Low activity period"
-                    + "\n(3) to go back to main menu"
-                    + "\n(4) to Exit the application!\n");
+                    + "\n(1): if it is a Standard Downtime EP"
+                    + "\n(2): if it is an Extraordinary Downtime/Low activity period"
+                    + "\n(3): to go back to main menu"
+                    + "\n(4): to Exit the application!\n");
 
             switch (input) {
                 case 1:
@@ -166,10 +170,10 @@ public class APPLoop implements Runnable {
         while (running) {
             // TODO: start the logic controller
             int input = uInput.askInputInt("Please pick a number: "
-                    + "\n(1) to start HFC Processing"
-                    + "\n(2) to start HFC without translation processing"
-                    + "\n(3) to go back to main menu"
-                    + "\n(4) to Exit the application!\n");
+                    + "\n(1): to start HFC Processing"
+                    + "\n(2): to start HFC without translation processing"
+                    + "\n(3): to go back to main menu"
+                    + "\n(4): to Exit the application!\n");
             switch (input) {
                 case 1:
                     startEmergencyPatchProcessing();
@@ -192,7 +196,7 @@ public class APPLoop implements Runnable {
         String username = uInput.askInputString("Please enter username:").trim();
         String password = uInput.askInputString("Please enter passowrd:").trim();
         String dbname = uInput.askInputString("Please enter DB name:").trim();
-        boolean loginsuccessful = dbm.login(username, password, "jdbc:mysql://localhost:3306/"+dbname+"?useSSL=true");
+        boolean loginsuccessful = dbm.login(username, password, "jdbc:mysql://localhost:3306/" + dbname + "?useSSL=true");
         loading(3, "Checking DB connection, please wait\n");
         if (dbm.conn != null) {
             System.out.println("Connection successful: " + dbm.conn);

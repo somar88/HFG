@@ -44,27 +44,33 @@ public class APPLoop implements Runnable {
                 + "\n(2) to enter user, password, URL "
                 + "\n(3) Exit the application!\n");
         int loginAttemptsCounter = 0;
-
-        switch (login) {
-            case 1:
-                if (!default_login()) {
-                    System.err.print("Error: Login was not successful!");
+        while (loginAttemptsCounter < 3) {
+            switch (login) {
+                case 1:
                     loginAttemptsCounter++;
-                    stop();
-                }
-                break;
-            case 2:
-                if (!login()) {
-                    System.err.print("Error: Login was not successful!");
+                    if (!default_login()) {
+                        System.err.print("Error: Login was not successful!");
+                        stop();
+                    }
+                    loginAttemptsCounter = 3;
+                    break;
+                case 2:
                     loginAttemptsCounter++;
+                    if (!login()) {
+                        System.err.print("Error: Login was not successful!");
+                        if (loginAttemptsCounter >= 3) {
+                            System.err.println("Login failed three times, please contact your adminstrator!");
+                            stop();
+                        }
+                    }
+                    loginAttemptsCounter = 3;
+                    break;
+                case 3:
                     stop();
-                }
-                break;
-            case 3:
-                stop();
-                break;
-            default:
-                System.out.println("Please pick a valid process number!");
+                    break;
+                default:
+                    System.out.println("Please pick a valid process number!");
+            }
         }
         while (running) {
             // TODO: start the logic controller
@@ -99,12 +105,13 @@ public class APPLoop implements Runnable {
                         }
                     }
                 case 2:
-
                     break;
                 case 3:
                     stop();
+                    break;
                 default:
                     System.out.println("Please pick a valid process number!");
+                    break;
             }
         }
         System.out.println("See you soon, bye!");

@@ -8,10 +8,21 @@ public class DBM {
     private static String connPassword;
     private static String connURL;
     public static Connection conn = null;
+    public static Statement stat = null;
+    public static ResultSet reSet = null;
 
     public static void main(String[] args) {
         try {
             conn = getMySQLConnection();
+            
+            stat = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            
+            reSet = stat.executeQuery("SELECT * FROM HFG.new_table");
+            
+            reSet.last();
+            
+            System.out.print("printing resaultset current row data : " + reSet.getRow() +" \n");
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +49,8 @@ public class DBM {
 //      String connPassword = "root#s.am";
 //      String connURL = "jdbc:mysql://localhost:3306/management?useSSL=true";
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-        Connection conn = DriverManager.getConnection(connURL, connUsername, connPassword);
+//        Connection conn = DriverManager.getConnection(connURL, connUsername, connPassword);
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/HFG?useSSL=true", "management", "dev@man");
         conn.setAutoCommit(false);
 //      System.out.println(conn);
         return conn;

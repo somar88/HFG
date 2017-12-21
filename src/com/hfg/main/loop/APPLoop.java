@@ -215,7 +215,7 @@ public class APPLoop implements Runnable {
     }
 
     private boolean default_login() {
-        boolean loginsuccessful = dbm.login("management", "dev@man", "jdbc:mysql://localhost:3306/management?useSSL=true");
+        boolean loginsuccessful = dbm.login("management", "dev@man", "jdbc:mysql://localhost:3306/HFG?useSSL=true");
         loading(3, "");
         System.out.println("Connection successful: " + dbm.conn);
         return loginsuccessful;

@@ -206,7 +206,7 @@ public class APPLoop implements Runnable {
         boolean loginsuccessful = dbm.login(username, password, "jdbc:mysql://localhost:3306/" + dbname + "?useSSL=true");
         loading(3, "Checking DB connection, please wait\n");
         if (dbm.conn != null) {
-            System.out.println("Connection successful: " + dbm.conn);
+            System.out.println("Connection String: " + dbm.conn);
         } else {
             System.err.println("Connection to DB was not successful! ");
         }
@@ -215,9 +215,9 @@ public class APPLoop implements Runnable {
     }
 
     private boolean default_login() {
-        boolean loginsuccessful = dbm.login("management", "dev@man", "jdbc:mysql://localhost:3306/HFG?useSSL=true");
+        boolean loginsuccessful = dbm.login("admin", "admin#s.am", "jdbc:mysql://localhost:3306/management?useSSL=true");
         loading(3, "");
-        System.out.println("Connection successful: " + dbm.conn);
+        System.out.println("Connection String: " + dbm.conn);
         return loginsuccessful;
     }
 

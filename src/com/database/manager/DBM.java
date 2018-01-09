@@ -39,7 +39,7 @@ public class DBM {
         } catch (Exception e) {
             System.err.println("Login was not successful!");
             // TODO: make sure to print the stack trace
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         return true;
     }
@@ -49,8 +49,8 @@ public class DBM {
 //      String connPassword = "root#s.am";
 //      String connURL = "jdbc:mysql://localhost:3306/management?useSSL=true";
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-//        Connection conn = DriverManager.getConnection(connURL, connUsername, connPassword);
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/HFG?useSSL=true", "management", "dev@man");
+        Connection conn = DriverManager.getConnection(connURL, connUsername, connPassword);
+//        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/HFG?useSSL=true", "management", "dev@man");
         conn.setAutoCommit(false);
 //      System.out.println(conn);
         return conn;
